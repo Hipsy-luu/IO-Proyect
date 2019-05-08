@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Añadir nueva coneccion</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content >
+  <ion-grid>
+    <ion-row>
+      <ion-toolbar>
+        <ion-item>
+          <ion-label style="flex: auto;width: 50%;">Desde :</ion-label>
+          <!-- Se muestran diferentes tipos de de vista con diferente coneccion a cada servicio -->
+          <ion-select *ngIf="opcAdd==0" color="dark" [(ngModel)]="from" placeholder="a" cancelText="Cancelar">
+            <ion-select-option *ngFor="let vertice of dijistraComponent.vertices;let i = index" value="{{vertice}}">{{vertice}}
+            </ion-select-option>
+          </ion-select>
+          <ion-select *ngIf="opcAdd==1" color="dark" [(ngModel)]="from" placeholder="a" cancelText="Cancelar">
+            <ion-select-option *ngFor="let vertice of primComponent.vertices;let i = index" value="{{vertice}}">{{vertice}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-toolbar>
+      <ion-toolbar>
+        <ion-item>
+          <ion-label style="flex: auto;width: 50%;">Hasta :</ion-label>
+          <!-- Se muestran diferentes tipos de de vista con diferente coneccion a cada servicio -->
+          <ion-select *ngIf="opcAdd==0" [(ngModel)]="to" placeholder="a" cancelText="Cancelar">
+            <ion-select-option *ngFor="let vertice of dijistraComponent.vertices;let i = index" value="{{vertice}}">{{vertice}}
+            </ion-select-option>
+          </ion-select>
+          <ion-select *ngIf="opcAdd==1" [(ngModel)]="to" placeholder="a" cancelText="Cancelar">
+            <ion-select-option *ngFor="let vertice of primComponent.vertices;let i = index" value="{{vertice}}">{{vertice}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-toolbar>
+      <ion-toolbar>
+        <ion-item>
+          <ion-label style="flex: auto;width: 50%;">Valor :</ion-label>
+          <ion-input inputmode="numeric" [(ngModel)]="value"></ion-input>
+        </ion-item>
+      </ion-toolbar>
+    </ion-row>
+    <!-- Boton Añadir -->
+    <ion-row size="12">
+        <ion-col size="6">
+          <ion-button style="width: 100%;" (click)="closePopover()">
+            CANCELAR
+          </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button (click)="add()" style="width: 100%;">
+            <ion-icon name="search"></ion-icon>
+            <ion-label>AÑADIR</ion-label>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+  </ion-grid>
+</ion-content>

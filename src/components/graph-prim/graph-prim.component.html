@@ -1,0 +1,83 @@
+<ion-card-header>
+  <ion-card-title>Metodo de Prim</ion-card-title>
+</ion-card-header>
+<ion-card-content>
+  <ion-grid>
+    <!-- Seccion que muestra el resultado de la operacion -->
+    <ion-row style="text-transform: capitalize;font-size: 18px;color: black;" *ngIf="primComponent.showResult">
+      <ion-label style="width: -webkit-fill-available;" *ngFor="let textline of primComponent.result">{{textline}}</ion-label>
+    </ion-row>
+    <ion-row>
+      <ion-toolbar>
+        <ion-item>
+          <ion-label style="flex: auto;width: 50%;font-size: xx-small;">Numero de Vertices :</ion-label>
+          <ion-button color="dark" (click)="primComponent.decrementNumofVar(0)"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+          <ion-label 
+            style="text-align: center" >{{primComponent.numVert}}</ion-label>
+          <ion-button color="dark" (click)="primComponent.incrementNumofVar(0)"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+        </ion-item>
+      </ion-toolbar>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-row>
+          <ion-toolbar>
+            <ion-item>
+              <ion-label style="flex: auto;width: 50%;font-size: xx-small;">Añadir Conexion :</ion-label>
+              <ion-button style="width: 30%;" color="dark" (click)="popOverAddConection(1)"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+            </ion-item>
+          </ion-toolbar>
+        </ion-row>
+        <ion-row>
+          <ion-toolbar>
+            <ion-item>
+              <ion-label style="flex: auto;width: 50%;font-size: xx-small;">Limpiar Conecciones :</ion-label>
+              <ion-button style="width: 30%;" color="dark" (click)="primComponent.clearConecctions()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+            </ion-item>
+          </ion-toolbar>
+        </ion-row>
+        <ion-row>
+          <ion-col><ion-label>No</ion-label></ion-col>
+          <ion-col><ion-label>De</ion-label></ion-col>
+          <ion-col><ion-label>A</ion-label></ion-col>
+          <ion-col><ion-label>COSTO</ion-label></ion-col>
+        </ion-row>
+        <ion-row size="12" *ngIf="primComponent.conections.length<1">
+          <ion-label style="margin: 0px 30%;">Sin conecciones</ion-label>
+        </ion-row>
+        <ion-row *ngFor="let item of primComponent.conections;let i = index">
+          <ion-col>
+            {{(i+1)}}
+          </ion-col>
+          <ion-col>
+            {{item[0]}}
+          </ion-col>
+          <ion-col>
+            {{item[1]}}
+          </ion-col>
+          <ion-col>
+            {{item[2]}}
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row  size="12">
+      
+      <ion-toolbar>
+          <ion-item>
+            <ion-button style="
+                              width: 70%;
+                              font-size: 20px;
+                              height: fit-content;
+                              margin: 0px 15%;
+                        " 
+                        color="dark" 
+                        (click)="primComponent.solve()">Calcular<ion-icon name="share"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-toolbar>
+    </ion-row>
+  </ion-grid>
+  
+</ion-card-content>
+

@@ -1,0 +1,99 @@
+<ion-card-header>
+  <ion-card-title>Metodo de Dijkstra</ion-card-title>
+</ion-card-header>
+<ion-card-content>
+  <ion-grid>
+    <!-- Seccion que muestra el resultado de la operacion -->
+    <ion-row style="text-transform: capitalize;font-size: 18px;color: black;" *ngIf="dijistraComponent.showResult">
+      <ion-label style="width: -webkit-fill-available;" *ngFor="let textline of dijistraComponent.result">{{textline}}</ion-label>
+    </ion-row>
+    <ion-row>
+      <ion-toolbar>
+        <ion-item>
+          <ion-label style="flex: auto;width: 50%;font-size: xx-small;">Numero de Vertices :</ion-label>
+          <ion-button color="dark" (click)="dijistraComponent.decrementNumofVar(0)"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+          <ion-label 
+            style="text-align: center" >{{dijistraComponent.numVert}}</ion-label>
+          <ion-button color="dark" (click)="dijistraComponent.incrementNumofVar(0)"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+        </ion-item>
+      </ion-toolbar>
+    </ion-row>
+    <ion-row>
+      <ion-toolbar>
+        <ion-item>
+            <ion-label style="flex: auto;font-size: xx-small;">Origen :</ion-label>
+            <ion-select  [(ngModel)]="dijistraComponent.from" placeholder="nodo" cancelText="Cancelar">
+              <ion-select-option *ngFor="let vertice of dijistraComponent.vertices;let i = index" value="{{vertice}}">{{vertice}}
+              </ion-select-option>
+            </ion-select>
+            <ion-label style="flex: auto;font-size: xx-small;">Destino :</ion-label>
+          <ion-select [(ngModel)]="dijistraComponent.to" placeholder="nodo" cancelText="Cancelar">
+            <ion-select-option *ngFor="let vertice of dijistraComponent.vertices;let i = index" value="{{vertice}}">{{vertice}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-toolbar>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-row>
+          <ion-toolbar>
+            <ion-item>
+              <ion-label style="flex: auto;width: 50%;font-size: xx-small;">Añadir Conexion :</ion-label>
+              <ion-button style="width: 30%;" color="dark" (click)="popOverAddConection(0)"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+            </ion-item>
+          </ion-toolbar>
+        </ion-row>
+        <ion-row>
+          <ion-toolbar>
+            <ion-item>
+              <ion-label style="flex: auto;width: 50%;font-size: xx-small;">Limpiar Conecciones :</ion-label>
+              <ion-button style="width: 30%;" color="dark" (click)="dijistraComponent.clearConecctions()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+            </ion-item>
+          </ion-toolbar>
+        </ion-row>
+        <ion-row>
+          <ion-col><ion-label>No</ion-label></ion-col>
+          <ion-col><ion-label>De</ion-label></ion-col>
+          <ion-col><ion-label>A</ion-label></ion-col>
+          <ion-col><ion-label>COSTO</ion-label></ion-col>
+        </ion-row>
+        <ion-row size="12" *ngIf="dijistraComponent.conections.length<1">
+          <ion-label style="margin: 0px 30%;">Sin conecciones</ion-label>
+        </ion-row>
+        <ion-row *ngFor="let item of dijistraComponent.conections;let i = index">
+          <ion-col>
+            {{(i+1)}}
+          </ion-col>
+          <ion-col>
+            {{item[0]}}
+          </ion-col>
+          <ion-col>
+            {{item[1]}}
+          </ion-col>
+          <ion-col>
+            {{item[2]}}
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-row  size="12">
+      
+      <ion-toolbar>
+          <ion-item>
+            <ion-button style="
+                              width: 70%;
+                              font-size: 20px;
+                              height: fit-content;
+                              margin: 0px 15%;
+                        " 
+                        color="dark" 
+                        (click)="dijistraComponent.solve()">Calcular<ion-icon name="share"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-toolbar>
+    </ion-row>
+  </ion-grid>
+  
+</ion-card-content>
+

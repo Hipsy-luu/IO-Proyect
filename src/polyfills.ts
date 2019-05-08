@@ -61,4 +61,8 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
+ * Esta linea debajo es para que la variable global de la libreria simplex
+ * sea usada o declarada correctamente
  */
+
+ (window as any).global = window;

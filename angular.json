@@ -39,7 +39,9 @@
                 "input": "src/global.scss"
               }
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/simple-simplex/dist/lib/simple-simplex/index.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {

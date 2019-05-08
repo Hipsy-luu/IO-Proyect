@@ -1,5 +1,7 @@
 {
-  "name": "io_simplex_proy",
-  "integrations": {},
+  "name": "io_proy",
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

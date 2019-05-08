@@ -1,0 +1,87 @@
+<ion-card>
+  <ion-card-header>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="8">
+            <ion-toolbar>
+                <ion-item style="width: 100%" >
+                  <ion-label style="flex: auto;width: fit-content;text-align: right;">N :</ion-label>
+                  <ion-button color="dark" (click)="decrementNumofN()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+                  <ion-label 
+                    style="text-align: center" >{{hungaroService.numN}}</ion-label>
+                  <ion-button color="dark" (click)="incrementNumofN()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+                  
+                </ion-item>
+                
+              </ion-toolbar>
+              <ion-toolbar>
+                <ion-item style="width: 100%;" >
+                  <ion-label style="flex: auto;width: fit-content;text-align: right;">M :</ion-label>
+                  <ion-button color="dark" (click)="decrementNumofM()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+                  <ion-label 
+                    style="text-align: center" >{{hungaroService.numM}}</ion-label>
+                  <ion-button color="dark" (click)="incrementNumofM()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+                </ion-item>
+              </ion-toolbar>
+        </ion-col>
+        <ion-col>
+          <ion-icon style="width: -webkit-fill-available;height: 100px;" name="apps"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
+  </ion-card-header>
+  <ion-card-content>
+      <ion-grid style="text-align: center;">
+          <ion-row>
+            <ion-label>Ingrese el valor de cada  tarea</ion-label>
+          </ion-row>
+          <ion-row>
+            <ion-col size="2">n\m</ion-col>
+            <ion-col *ngFor="let numcol of hungaroService.data[0]; let m = index">{{(m+1)}}</ion-col>
+          </ion-row>
+          <ion-row *ngFor="let item of hungaroService.data; let n = index" style="align-items: center;">
+            <ion-col size="2">{{(n+1)}}</ion-col>
+            <ion-col *ngFor="let value of item; let m = index; trackBy: hungaroService.testUpdate">
+              <ion-item style="padding: 0px;--inner-padding-end: 0px;--padding-start: 0px;">
+                <ion-input 
+                clear-input 
+                clear-on-edit 
+                inputmode="numeric"
+                style="--padding-start: 0px;text-align: center;width: auto;font-size: 12px;" 
+                type="number" 
+                (ionBlur)="actVal(n,m)"
+                (keyup)="checkFocus(n,m,value)"
+                [(ngModel)]="value"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col *ngIf="hungaroService.resultReady">
+              <ion-row>
+                <ion-label>Resultados</ion-label>
+              </ion-row>
+              <ion-row>
+                <ion-col size="2">n\m</ion-col>
+                <ion-col *ngFor="let value of hungaroService.dataResult[0]; let m = index">{{(m+1)}}</ion-col>
+              </ion-row>
+              <ion-row *ngFor="let item of hungaroService.dataResult; let n = index" style="align-items: center;">
+                <ion-col size="2">{{(n+1)}}</ion-col>
+                <ion-col *ngFor="let value of item; let m = index">
+                  <ion-item style="text-align: center;padding: 0px;--inner-padding-end: 0px;--padding-start: 0px;">
+                    <ion-label style="--padding-start: 0px;text-align: center;width: auto;font-size: 12px;" >{{value}}</ion-label>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+          
+          <ion-row align-items-center style="text-align: center;">
+            <ion-col align-self-center>
+              <ion-button color="dark" (click)="hungaroService.solveProblemUI()">CALCULAR</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        
+  </ion-card-content>
+</ion-card>
