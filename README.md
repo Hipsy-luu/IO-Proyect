@@ -1,6 +1,16 @@
 # IO-Proyect
 Este proyecto es una calculadora que resuelve por medio de los metodos vistos en clase basado en Ionic 4v
 
+Para poder usar el proyecto e instalarlo se debe de tener NODE.js instalado
+     
+     https://nodejs.org/es/
+
+Despues de instalar el Node tienen que instalar Ionic aqui les dejo el link y el comando que deben correr en la consola
+
+     https://ionicframework.com/docs/installation/cli
+     
+     >>npm install -g ionic
+
 Documentación de las libreras Externas usadas:
 
 simple-simplex - https://www.npmjs.com/package/simple-simplex
