@@ -13,11 +13,11 @@ Despues de instalar el Node tienen que instalar Ionic aqui les dejo el link y el
 
 Documentación de las libreras Externas usadas:
 
-simple-simplex - https://www.npmjs.com/package/simple-simplex
+     simple-simplex - https://www.npmjs.com/package/simple-simplex
 
-munkres-js - https://www.npmjs.com/package/munkres-js
+     munkres-js - https://www.npmjs.com/package/munkres-js
 
-js-graph-algorithms - https://www.npmjs.com/package/js-graph-algorithms
+     js-graph-algorithms - https://www.npmjs.com/package/js-graph-algorithms
 
 
 
