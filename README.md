@@ -11,6 +11,14 @@ Despues de instalar el Node tienen que instalar Ionic aqui les dejo el link de l
      
      >>npm install -g ionic
      
+Despues de instalar la consola del Ionic podemos instalar el proyecto con el siguiente comando
+
+     npm install
+
+Luego para poder correrlo y visualizar
+
+     ionic serve
+     
 Este link es la documentacion del Ionic y todo lo que se puede hacer con el ademas de lo que se puede hacer con Angular
 
      https://ionicframework.com/docs
