@@ -4,6 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
   { path: 'add-conection-dj', loadChildren: './popover/add-conection-dj/add-conection-dj.module#AddConectionDjPageModule' }
+
 ];
 @NgModule({
   imports: [
