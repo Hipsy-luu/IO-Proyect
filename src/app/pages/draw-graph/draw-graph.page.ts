@@ -152,6 +152,7 @@ export class DrawGraphPage implements OnInit {
                 let edgeId = sourceId + "->" + targetId + ":";
                 addedEles["0"]._private.data.id = edgeId;
                 out.presentEdgeWeightPopover(edgeId);
+                
             }
         };
 
@@ -196,6 +197,15 @@ export class DrawGraphPage implements OnInit {
 
     solve() {
         alert("TODO");
+        console.log(this.cy.edges('[source = "j"]').data());
+        console.log(this.getDictionarie());
+        
+    }
+
+    getDictionarie(){
+        var weights = this.cy.nodes().map(function( ele ){
+            return ele.data();
+          });
     }
     //Aqui nomas mandamos a llamar los metodos de los algoritmos y ya en otro lado los definimos
     //Todo sea por un código mas L I M P I O

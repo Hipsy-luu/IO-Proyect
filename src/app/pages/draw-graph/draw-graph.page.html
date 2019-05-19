@@ -12,10 +12,11 @@
 
     <ion-item>
         <ion-label>Métodos</ion-label>
-        <ion-select #S multiple="false" interface = "popover" (ionChange) = "optionHandler(S.value)">
+        <ion-select ng-model="method" #S multiple="false" interface = "popover" (ionChange) = "optionHandler(S.value)">
             <ion-select-option value = "RCorta">Ruta mas corta</ion-select-option>
             <ion-select-option value = "MSATree">Arbol de expansion minima</ion-select-option>
             <ion-select-option value = "RCritica">Ruta Crítica</ion-select-option>
+            <ion-select-option value = "FMaximo">Flujo Máximo</ion-select-option>
         </ion-select>
     </ion-item>
 
