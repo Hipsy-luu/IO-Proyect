@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 //Servicio para el componente 
 //Les recomiendo poner todo lo referente a este metodo aqui
-import { NortcornerComponentServiceService } from './../../app/services/nortcorner-component-service.service';
+import { NortcornerComponentServiceService } from './../../services/nortcorner-component-service.service';
 
 @Component({
   selector: 'app-calc-nortcorner',

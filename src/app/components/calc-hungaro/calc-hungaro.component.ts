@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HungaroComponentServiceService } from '../../app/services/hungaro-component-service.service';
+import { HungaroComponentServiceService } from '../../services/hungaro-component-service.service';
 
 @Component({
   selector: 'app-calc-hungaro',

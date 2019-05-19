@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 //Servicio que nos ayuda con las variables para llenar el metodo simplex
 //Y construirlo
-import { SimplexTabService } from '../../app/services/simplex-tab.service';
+import { SimplexTabService } from '../../services/simplex-tab.service';
 
 @Component({
   selector: 'app-calc-symplex',

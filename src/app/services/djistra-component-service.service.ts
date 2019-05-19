@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 //Libreria para aplicar djistra
 import * as JsGraphAlgorithms from 'js-graph-algorithms';
-import { NumericValueAccessor } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'

@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { SimplexPage } from './simplex.page';
 
 //En este modulo tengo como implementar las graficas y los metodos relacionados en cada elemento
-import { ComponentsModule } from '../../../components/components.component';
+import { ComponentsModule } from '../../components/components.component';
 
 const routes: Routes = [
   {

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NavParams, PopoverController } from '@ionic/angular';
 
 //Servicio para actualizar el componente de dijistra
-import { DjistraComponentServiceService } from '../../services/djistra-component-service.service';
+import { DjistraComponentServiceService } from '../../../services/djistra-component-service.service';
 //Servicio para actualizar el componente de prim
-import { PrimComponentServiceService } from '../../services/prim-component-service.service';
+import { PrimComponentServiceService } from '../../../services/prim-component-service.service';
 
 @Component({
   selector: 'app-add-conection-dj',

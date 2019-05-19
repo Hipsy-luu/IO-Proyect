@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 
 //Pop Up Para Añadir Campos
 //Se añade la vista de donde se añaden las conecciones
-import { AddConectionDjPage } from '../../app/popover/add-conection-dj/add-conection-dj.page';
+import { AddConectionDjPage } from '../../components/popover/add-conection-dj/add-conection-dj.page';
 import { NavController, PopoverController } from '@ionic/angular';
 
 //Servicio que nos ayuda alimentar la interfaz y ademas contiene los metodos para resolver
 //El grafo por el metodo de prim
-import { PrimComponentServiceService } from '../../app/services/prim-component-service.service';
+import { PrimComponentServiceService } from '../../services/prim-component-service.service';
 
 @Component({
   selector: 'app-graph-prim',
