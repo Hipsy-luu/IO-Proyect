@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-back-button defaultHref="home"></ion-back-button>
+      </ion-buttons>
+      <ion-title>DrawGraph</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div id="cy"></div>
+
+  <ion-item>
+      <ion-label>Métodos</ion-label>
+      <ion-select #S multiple="false" interface = "popover" (ionChange) = "optionHandler(S.value)">
+          <ion-select-option value = "RCorta">Ruta mas corta</ion-select-option>
+          <ion-select-option value = "MSATree">Arbol de expansion minima</ion-select-option>
+          <ion-select-option value = "RCritica">Ruta Crítica</ion-select-option>
+      </ion-select>
+  </ion-item>
+
+</ion-content>

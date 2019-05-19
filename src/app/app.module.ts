@@ -9,7 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-//Se agrega el modulo para el popOver para añadir conecciones del dijistra
+//Se agrega el modulo para el popOver para añadir conecciones del dijistra y el de prim
 import { AddConectionDjPageModule } from './popover/add-conection-dj/add-conection-dj.module' ;
 
 @NgModule({
