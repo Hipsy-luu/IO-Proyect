@@ -8,6 +8,8 @@ cytoscape.use(edgehandles);
 
 import { AddNodePage } from '../add-node/add-node.page';
 import { EdgeWeightComponent } from '../../../components/edge-weight/edge-weight.component';
+import { InitialFinalNodeComponent } from '../../../components/initial-final-node/initial-final-node.component';
+
 
 @Component({
     selector: 'app-draw-graph',
@@ -49,6 +51,17 @@ export class DrawGraphPage implements OnInit {
                 .data("weight", data.weight)
                 .data("id", edgeId + data.weight);
         }
+    }
+
+    async presentInitialFinalNodePopover(nodes: any) {
+        const popover = await this.popoverController.create({
+            component: InitialFinalNodeComponent,
+            translucent: true,
+            animated: true,
+            componentProps: { nodes }
+        });
+
+        await popover.present();
     }
 
     async presentToast(message: string) {
@@ -195,7 +208,8 @@ export class DrawGraphPage implements OnInit {
     }
 
     solve() {
-        alert("TODO");
+        console.log(this.cy.nodes());
+        this.presentInitialFinalNodePopover(this.cy.nodes());
     }
     //Aqui nomas mandamos a llamar los metodos de los algoritmos y ya en otro lado los definimos
     //Todo sea por un código mas L I M P I O
