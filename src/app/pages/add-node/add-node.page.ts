@@ -38,7 +38,7 @@ export class AddNodePage implements OnInit {
             const data = {
                 id: this.nodeName.replace(/\s/g, ""),
                 name: this.nodeName.replace(/\s/g, ""),
-                weight: { weight: +this.nodeWeight },
+                weight: +this.nodeWeight,
                 position: { x: 0, y: 0 }
             };
 
