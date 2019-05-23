@@ -213,7 +213,7 @@ export class DrawGraphPage implements OnInit {
     //Este metodo guarda la opcion que se seleccionó en el selector y cambia un poco el estilo visual dependiendo del método
     store(option){
         this.solveOption = option;
-        if (option == 'MSATree'){
+        if (option == 'MSTree'){
             this.cy.style().selector('edge').style({'target-arrow-shape' : 'none'}).update();
         }else{
             this.cy.style().selector('edge').style({'target-arrow-shape' : 'triangle'}).update();
@@ -228,15 +228,16 @@ export class DrawGraphPage implements OnInit {
         for (let i = 0; i < aristas.length; i++){
             //Por alguna razon el 'compilador' llora que porque no tiene metodo select, lo mas gracioso es que aun asi jala
             aristas[i].select();
-
             //Selecciono nodo inicial
+            let split : Array<string> = aristas[i].data('id').split("->");
             this.cy.getElementById(
-                aristas[i].data('id').charAt(0)
+                split[0]
             ).select();
 
             //Selecciono nodo final
             this.cy.getElementById(
-                aristas[i].data('id').charAt(3)
+                //Como al la id es de la forma [nodo inicio] -> [nodo final]:, debo consultar la substring para obtener la pura id del nodo final
+                split[1].substring(0,split[1].length-1)
             ).select();
         }
     }
@@ -244,9 +245,9 @@ export class DrawGraphPage implements OnInit {
      * Metodo para encontrar el arbol de expansión mínima del grafo utilizando el algoritmo de Prim
      * @param start Nodo de inicio
      */
-    MSATree(start){
+    MSTree(start){
         //Inicializo las estructuras necesarias
-        let MSA = new Collections.LinkedList();
+        let MST = new Collections.LinkedList();
         let edgesQueue = new PriorityQueue();
         let visitedVertices = {};
 
@@ -264,33 +265,33 @@ export class DrawGraphPage implements OnInit {
             let currentMinEdge: any = edgesQueue.poll();
 
             let nextMinVertex = null;
-
             /**
              * Para saber los nodos conectados lo que hice fue obtener la Id
              * Como la id es de la forma {id_nodo_inicio}->{id_nodo_final}
              * entonces podemos saber por los index en la string las ids de los nodos
              */
-            if (!visitedVertices[currentMinEdge.data('id').charAt(0)]){
-                nextMinVertex = this.cy.getElementById(currentMinEdge.data('id').charAt(0));
-            } else if (!visitedVertices[currentMinEdge.data('id').charAt(3)]){
-                nextMinVertex = this.cy.getElementById(currentMinEdge.data('id').charAt(3));
+            let split : Array<string> = currentMinEdge.data('id').split("->");
+            if (!visitedVertices[split[0]]){
+                nextMinVertex = this.cy.getElementById(split[0]);
+            } else if (!visitedVertices[split[1]]){
+                nextMinVertex = this.cy.getElementById(split[1].substring(0,split[1].length-1));
             }
 
             if (nextMinVertex){
-                MSA.add(currentMinEdge);
+                MST.add(currentMinEdge);
                 visitedVertices[nextMinVertex.data('id')] = nextMinVertex;
                 
                 //Agrego todas las aristas conectadas a la cola de prioridad
                 nextMinVertex.connectedEdges().forEach(function( ele ){
-                    if (
-                        !visitedVertices[ele.data('id').charAt(0)] 
-                        || !visitedVertices[ele.data('id').charAt(3)])
+                    let aux = ele.data('id').split("->");
+                    if (!visitedVertices[aux[0]] 
+                        || !visitedVertices[aux[1].substring(0,aux[1].length-1)])
                     edgesQueue.add(ele,ele.data('weight'));
                 });
 
             }
         }
-        return MSA.toArray();
+        return MST.toArray();
     }
     //Por el momento funciona con el nodo de inicio en el seleccionado, no se como se podria implementar para elegir el nodo final
     solve() {
@@ -300,8 +301,8 @@ export class DrawGraphPage implements OnInit {
                //statements;
                break;
             }
-            case "MSATree": {
-               this.pintar(this.MSATree(start));
+            case "MSTree": {
+               this.pintar(this.MSTree(start));
                break;
             }
             case "RCritica":{
