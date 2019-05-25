@@ -3,15 +3,19 @@ import { ModalController } from '@ionic/angular';
 import { ToastController } from '@ionic/angular';
 import { PopoverController } from '@ionic/angular';
 import PriorityQueue from 'node_modules\\javascript-algorithms-and-data-structures\\src\\data-structures\\priority-queue\\PriorityQueue.js';
+import star from 'node_modules/ngraph.path/a-star/a-star.js'
 import * as Collections from 'typescript-collections';
 import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
 cytoscape.use(edgehandles);
 
+
+
 import { AddNodePage } from '../add-node/add-node.page';
 import { EdgeWeightComponent } from '../../../components/edge-weight/edge-weight.component';
 import { InitialFinalNodeComponent } from '../../../components/initial-final-node/initial-final-node.component';
 
+declare var require: any;
 
 @Component({
     selector: 'app-draw-graph',
@@ -21,6 +25,8 @@ import { InitialFinalNodeComponent } from '../../../components/initial-final-nod
 export class DrawGraphPage implements OnInit {
     cy;
     solveOption;
+    
+    
 
     constructor(private modalController: ModalController, public toastController: ToastController, public popoverController: PopoverController) { }
 
@@ -213,7 +219,7 @@ export class DrawGraphPage implements OnInit {
     //Este metodo guarda la opcion que se seleccionó en el selector y cambia un poco el estilo visual dependiendo del método
     store(option){
         this.solveOption = option;
-        if (option == 'MSATree'){
+        if (option == 'MSATree' || option == 'RCorta'){
             this.cy.style().selector('edge').style({'target-arrow-shape' : 'none'}).update();
         }else{
             this.cy.style().selector('edge').style({'target-arrow-shape' : 'triangle'}).update();
@@ -228,6 +234,7 @@ export class DrawGraphPage implements OnInit {
         for (let i = 0; i < aristas.length; i++){
             //Por alguna razon el 'compilador' llora que porque no tiene metodo select, lo mas gracioso es que aun asi jala
             aristas[i].select();
+            console.log(aristas[i]);
 
             //Selecciono nodo inicial
             this.cy.getElementById(
@@ -238,6 +245,15 @@ export class DrawGraphPage implements OnInit {
             this.cy.getElementById(
                 aristas[i].data('id').charAt(3)
             ).select();
+        }
+    }
+
+    pintar2(start, end, path){
+        //start.select()
+        //end.select()
+        for(let i = 0; i < path.length-1;i++){
+            console.log(path[i].id + path[i+1].id)
+            this.cy.edges('[source = "'+path[i].id +'" ][target = "'+path[i+1].id  + '" ]').select();
         }
     }
     /**
@@ -292,20 +308,75 @@ export class DrawGraphPage implements OnInit {
         }
         return MSA.toArray();
     }
+
+    RCorta(start, end, edges){
+       
+        let createGraph = require('ngraph.graph');
+        let graph = createGraph();
+        for(let i = 0; i < edges[0].length ; i++){
+            graph.addLink(edges[0][i], edges[1][i], {weight: edges[2][i]});
+        }
+        // graph.addLink('a', 'b', {weight: 10});
+        // graph.addLink('a', 'c', {weight: 10});
+        // graph.addLink('c', 'd', {weight: 5});
+        // graph.addLink('b', 'd', {weight: 10});
+        let pathFinder = star(graph, {
+            // We tell our pathfinder what should it use as a distance function:
+            distance(fromNode, toNode, link) {
+              // We don't really care about from/to nodes in this case,
+              // as link.data has all needed information:
+              return link.data.weight;
+            }
+          });
+          try{
+            let path = pathFinder.find(start, end);
+            return path;
+          }catch{
+              this.presentToast("No se encontró camino");
+          }
+          
+    }
     //Por el momento funciona con el nodo de inicio en el seleccionado, no se como se podria implementar para elegir el nodo final
-    solve() {
-        let start = this.cy.$(':selected');
+    start
+    end    
+    selectStart = true;
+    async solve() {
+        if(this.selectStart){
+            this.start = this.cy.$(':selected');
+        }else{
+            this.end = this.cy.$(':selected');
+        }
         switch(this.solveOption) {
             case "RCorta": {
-               //statements;
+                if(this.end != undefined && this.end.length && this.start.length && this.start.data('id') != this.end.data('id')){
+                    let nodes = this.getDictionarie();
+                    let edges = this.getEdges();
+                    let path = this.RCorta(this.start.data('id'), this.end.data('id'), edges);
+                    if(path) 
+                        this.pintar2(this.start, this.end, path);
+                    this.end = undefined;
+                    this.start = undefined
+                    this.selectStart = true;
+                    console.log(path);
+
+                }else if(!this.start.length){
+                    this.presentToast("Favor de seleccionar el nodo inicio");
+                }else if(this.end == undefined || !this.end.length ){
+                    this.start.unselect()
+                    this.presentToast("Favor de seleccionar ahora el nodo final");
+                    this.selectStart = false;
+                }else if(this.start.data('id') == this.end.data('id')){
+                    this.presentToast("Favor de seleccionar nodo final distinto a inicio");
+                }
+
+                
                break;
             }
             case "MSATree": {
-               this.pintar(this.MSATree(start));
+               this.pintar(this.MSATree(this.start));
                break;
             }
             case "RCritica":{
-                //statements;
                 break;
             }
             case "FlujoMax":{
@@ -313,6 +384,27 @@ export class DrawGraphPage implements OnInit {
                 break;
             }
         }
+    }
+
+    getDictionarie(){
+        var nodes = this.cy.nodes().map(function( ele ){
+            return ele.data('id');  
+        });
+        return nodes;
+    }
+
+    getEdges(){
+        var source = this.cy.edges().map(function( ele ){
+            return ele.data('source');  
+        });
+        var target = this.cy.edges().map(function( ele ){
+            return ele.data('target');  
+        });
+        var weight = this.cy.edges().map(function( ele ){
+            return ele.data('weight');  
+        });
+
+        return [source, target, weight];
     }
 
 }
