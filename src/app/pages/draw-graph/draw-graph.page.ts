@@ -6,7 +6,9 @@ import PriorityQueue from 'node_modules\\javascript-algorithms-and-data-structur
 import * as Collections from 'typescript-collections';
 import cytoscape from 'cytoscape';
 import edgehandles from 'cytoscape-edgehandles';
+import { CriticalPath } from './critical-path';
 cytoscape.use(edgehandles);
+import { AlertController } from '@ionic/angular';
 
 import { AddNodePage } from '../add-node/add-node.page';
 import { EdgeWeightComponent } from '../../../components/edge-weight/edge-weight.component';
@@ -22,7 +24,12 @@ export class DrawGraphPage implements OnInit {
     cy;
     solveOption;
 
-    constructor(private modalController: ModalController, public toastController: ToastController, public popoverController: PopoverController) { }
+    constructor(
+      private modalController: ModalController,
+      public toastController: ToastController,
+      public popoverController: PopoverController,
+      public alertController: AlertController
+    ){ }
 
     goHome() {
         this.modalController.dismiss();
@@ -168,7 +175,7 @@ export class DrawGraphPage implements OnInit {
                 let edgeId = sourceId + "->" + targetId + ":";
                 addedEles["0"]._private.data.id = edgeId;
                 out.presentEdgeWeightPopover(edgeId);
-                
+
             }
         };
 
@@ -222,7 +229,7 @@ export class DrawGraphPage implements OnInit {
     /**
      * Pinta las lineas y sus nodos conectados del grafo
      * @param aristas Es un arreglo de aristas resultado de algun metodo de los que estamos trabajando aqui
-     * 
+     *
      */
     pintar(aristas){
         for (let i = 0; i < aristas.length; i++){
@@ -258,7 +265,7 @@ export class DrawGraphPage implements OnInit {
         start.connectedEdges().forEach(function( ele ){
             edgesQueue.add(ele,ele.data('weight'));
           });
-        
+
         //Exploramos todas las aristas encoladas
         while (!edgesQueue.isEmpty()){
 
@@ -280,11 +287,11 @@ export class DrawGraphPage implements OnInit {
             if (nextMinVertex){
                 MST.add(currentMinEdge);
                 visitedVertices[nextMinVertex.data('id')] = nextMinVertex;
-                
+
                 //Agrego todas las aristas conectadas a la cola de prioridad
                 nextMinVertex.connectedEdges().forEach(function( ele ){
                     let aux = ele.data('id').split("->");
-                    if (!visitedVertices[aux[0]] 
+                    if (!visitedVertices[aux[0]]
                         || !visitedVertices[aux[1].substring(0,aux[1].length-1)])
                     edgesQueue.add(ele,ele.data('weight'));
                 });
@@ -306,7 +313,11 @@ export class DrawGraphPage implements OnInit {
                break;
             }
             case "RCritica":{
-                //statements;
+                const criticalPath = new CriticalPath(this.cy);
+                const paths = criticalPath.getCriticalPaths();
+                const slack = criticalPath.getSlackTimes();
+                const body = this.constructBody(paths, slack);
+                this.presentAlert('Ruta crítica', body);
                 break;
             }
             case "FlujoMax":{
@@ -314,6 +325,24 @@ export class DrawGraphPage implements OnInit {
                 break;
             }
         }
+    }
+
+    constructBody(paths: string[], slack: string[]){
+      let message = `<li>${paths.join('</li><li>')}</li></br>`;
+      if (slack.length > 0) {
+        message = message.concat(`Holguras</br><li>${slack.join('</li><li>')}</li>`);
+      }
+      return message;
+    }
+
+    async presentAlert(method: string, message: string) {
+      let alert = await this.alertController.create({
+        header: 'Resultados',
+        subHeader: method,
+        message: message,
+        buttons: ['OK']
+      });
+      await alert.present();
     }
 
 }
