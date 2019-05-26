@@ -219,7 +219,7 @@ export class DrawGraphPage implements OnInit {
     //Este metodo guarda la opcion que se seleccionó en el selector y cambia un poco el estilo visual dependiendo del método
     store(option){
         this.solveOption = option;
-        if (option == 'MSATree' || option == 'RCorta'){
+        if (option == 'MSATree'){
             this.cy.style().selector('edge').style({'target-arrow-shape' : 'none'}).update();
         }else{
             this.cy.style().selector('edge').style({'target-arrow-shape' : 'triangle'}).update();
@@ -249,12 +249,12 @@ export class DrawGraphPage implements OnInit {
     }
 
     pintar2(start, end, path){
-        //start.select()
-        //end.select()
+        start.select()
+        end.select()
         for(let i = 0; i < path.length-1;i++){
             console.log(path[i].id + path[i+1].id)
-            this.cy.edges('[source = "'+path[i].id +'" ][target = "'+path[i+1].id  + '" ]').select();
-        }
+            this.cy.edges('[source = "'+path[i+1].id +'" ][target = "'+path[i].id  + '" ]').select();
+        }   
     }
     /**
      * Metodo para encontrar el arbol de expansión mínima del grafo utilizando el algoritmo de Prim
