@@ -59,7 +59,11 @@ export class DrawGraphPage implements OnInit {
             edge.data("label", data.weight)
                 .data("weight", data.weight)
                 .data("id", edgeId + data.weight);
+            if(data.weight2 !== undefined){
+                edge.data("weight2", data.weight2)
+            }
         }
+        console.log(edge.data("weight2"));
     }
 
     async presentInitialFinalNodePopover(nodes: any) {
@@ -368,8 +372,6 @@ export class DrawGraphPage implements OnInit {
                 }else if(this.start.data('id') == this.end.data('id')){
                     this.presentToast("Favor de seleccionar nodo final distinto a inicio");
                 }
-
-                
                break;
             case "MSTree": 
                this.pintar(this.MSTree(this.start));
@@ -401,8 +403,15 @@ export class DrawGraphPage implements OnInit {
         var weight = this.cy.edges().map(function( ele ){
             return ele.data('weight');  
         });
-
-        return [source, target, weight];
+        var weight2 = this.cy.edges().map(function( ele ){
+            return ele.data('weight2');  
+        });
+        if(weight2 !== undefined){
+            return [source, target, weight, weight2];
+        }
+        else{
+            return [source, target, weight];
+        }
     }
 
 }
