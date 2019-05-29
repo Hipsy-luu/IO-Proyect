@@ -11,8 +11,6 @@ import { CriticalPath } from './critical-path';
 cytoscape.use(edgehandles);
 import { AlertController } from '@ionic/angular';
 
-
-
 import { AddNodePage } from '../add-node/add-node.page';
 import { EdgeWeightComponent } from '../../../components/edge-weight/edge-weight.component';
 import { InitialFinalNodeComponent } from '../../../components/initial-final-node/initial-final-node.component';

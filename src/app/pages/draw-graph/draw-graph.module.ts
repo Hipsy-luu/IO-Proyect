@@ -13,6 +13,13 @@ import { AddNodePageModule } from '../add-node/add-node.module';
 import { EdgeWeightComponent } from '../../../components/edge-weight/edge-weight.component';
 import { InitialFinalNodeComponent } from '../../../components/initial-final-node/initial-final-node.component';
 
+const routes: Routes = [
+  {
+    path: '',
+    component: DrawGraphPage
+  }
+];
+
 @NgModule({
     entryComponents: [
         AddNodePage,
@@ -22,6 +29,7 @@ import { InitialFinalNodeComponent } from '../../../components/initial-final-nod
     imports: [
         CommonModule,
         FormsModule,
+        RouterModule.forChild(routes),
         IonicModule,
         AddNodePageModule
     ],

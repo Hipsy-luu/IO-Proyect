@@ -9,8 +9,8 @@ import { SimplexPage } from './simplex.page';
 
 //En este modulo tengo como implementar las graficas y los metodos relacionados en cada elemento
 import { ComponentsModule } from '../../components/components.component';
-import { DrawGraphPage } from "../pages/draw-graph/draw-graph.page";
-import { DrawGraphPageModule } from "../pages/draw-graph/draw-graph.module";
+import { DrawGraphPage } from "../draw-graph/draw-graph.page";
+import { DrawGraphPageModule } from "../draw-graph/draw-graph.module";
 
 const routes: Routes = [
   {
@@ -27,7 +27,7 @@ const routes: Routes = [
         IonicModule,
         CommonModule,
         FormsModule,
-        RouterModule.forChild([{ path: '', component: Tab2Page }]),
+        RouterModule.forChild(routes),
         DrawGraphPageModule,
         ComponentsModule,
     ],
