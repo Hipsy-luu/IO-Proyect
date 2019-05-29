@@ -54,6 +54,8 @@ export class NortcornerComponentServiceService {
     }
 
     cleanCost() {
+        this.cost = []
+
         for (var i = 0; i < this.stockSize; i++) {
             this.cost[i] = [];
 
