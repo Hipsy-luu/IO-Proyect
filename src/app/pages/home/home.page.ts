@@ -23,7 +23,8 @@ export class HomePage implements OnInit {
     },
     {
         name: "Esquina Noroeste",
-        img: "../assets/imgs/esquina_noroeste.png"
+        img: "../assets/imgs/esquina_noroeste.png",
+        url:"/north-corner",
     },
     {
         name: "Métodos Gráficos",
