@@ -1,22 +1,47 @@
 <ion-header>
-  <ion-toolbar>
-      <ion-buttons slot="start">
-          <ion-back-button defaultHref="home"></ion-back-button>
-      </ion-buttons>
-      <ion-title>DrawGraph</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="home" (click)="goHome()"></ion-back-button>
+        </ion-buttons>
+        <ion-title>DrawGraph</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div id="cy"></div>
+    <div id="cy"></div>
 
-  <ion-item>
-      <ion-label>Métodos</ion-label>
-      <ion-select #S multiple="false" interface = "popover" (ionChange) = "optionHandler(S.value)">
-          <ion-select-option value = "RCorta">Ruta mas corta</ion-select-option>
-          <ion-select-option value = "MSATree">Arbol de expansion minima</ion-select-option>
-          <ion-select-option value = "RCritica">Ruta Crítica</ion-select-option>
-      </ion-select>
-  </ion-item>
+    <ion-item>
+        <ion-label>Métodos</ion-label>
+        <ion-select #S multiple="false" interface = "popover" (ionChange) = "store(S.value)">
+            <ion-select-option value = "MSTree">Arbol de expansion minima</ion-select-option>
+            <ion-select-option value = "RCorta">Ruta mas corta</ion-select-option>
+            <ion-select-option value = "RCritica">Ruta Crítica</ion-select-option>
+            <ion-select-option value = "FlujoMax">Flujo Máximo</ion-select-option>
+        </ion-select>
+    </ion-item>
 
+    <ion-fab class="extra-margin" vertical="bottom" horizontal="end" slot="fixed">
+
+        <ion-fab-button>
+            <ion-icon name="create"></ion-icon>
+        </ion-fab-button>
+
+        <ion-fab-list side="top">
+            <ion-fab-button color="success" (click)="addNode()">
+                <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="danger" (click)="removeNode()">
+                <ion-icon name="trash"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button (click)="recenter()">
+                <ion-icon name="locate"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button color="dark" (click)="solve()">
+            <ion-icon name="play"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 </ion-content>

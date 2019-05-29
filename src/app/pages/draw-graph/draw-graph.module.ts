@@ -7,23 +7,24 @@ import { IonicModule } from '@ionic/angular';
 
 import { DrawGraphPage } from './draw-graph.page';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: DrawGraphPage
-  }
-];
+import { AddNodePage } from '../add-node/add-node.page';
+import { AddNodePageModule } from '../add-node/add-node.module';
+
+import { EdgeWeightComponent } from '../../../components/edge-weight/edge-weight.component';
+import { InitialFinalNodeComponent } from '../../../components/initial-final-node/initial-final-node.component';
 
 @NgModule({
-  entryComponents: [
-    
-],
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
-  ],
-  declarations: [DrawGraphPage]
+    entryComponents: [
+        AddNodePage,
+        EdgeWeightComponent,
+        InitialFinalNodeComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        AddNodePageModule
+    ],
+    declarations: [DrawGraphPage, EdgeWeightComponent, InitialFinalNodeComponent]
 })
-export class DrawGraphPageModule {}
+export class DrawGraphPageModule { }

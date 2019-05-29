@@ -1,0 +1,28 @@
+<ion-list>
+    <ion-list-header>Select Multiple Selection</ion-list-header>
+
+    <ion-item>
+        <ion-label>Initial Node</ion-label>
+        <ion-select cancelText="CANCEL" okText="DONE" >
+            <ion-select-option *ngFor="let node of n">{{node.name}}</ion-select-option>
+        </ion-select>
+    </ion-item>
+
+    <ion-item>
+        <ion-label>Final Node</ion-label>
+        <ion-select cancelText="CANCEL" okText="DONE">
+            <ion-select-option *ngFor="let node of n">{{node.name}}</ion-select-option>
+        </ion-select>
+    </ion-item>
+</ion-list>
+
+<ion-grid>
+    <ion-row>
+        <ion-col>
+            <ion-button fill="clear" expand="full" (click)="cancel()">CANCEL</ion-button>
+        </ion-col>
+        <ion-col>
+            <ion-button fill="clear" expand="full" (click)="done()">DONE</ion-button>
+        </ion-col>
+    </ion-row>
+</ion-grid>

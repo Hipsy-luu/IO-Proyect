@@ -13,8 +13,8 @@ const routes: Routes = [
   { path: 'simplex', loadChildren: './pages/simplex/simplex.module#SimplexPageModule' },
   { path: 'draw-graph', loadChildren: './pages/draw-graph/draw-graph.module#DrawGraphPageModule' },
   { path: 'hungaro', loadChildren: './pages/hungaro/hungaro.module#HungaroPageModule' },
-  { path: 'north-corner', loadChildren: './pages/north-corner/north-corner.module#NorthCornerPageModule' }
-
+  { path: 'north-corner', loadChildren: './pages/north-corner/north-corner.module#NorthCornerPageModule' },
+  { path: 'add-conection-dj', loadChildren: './popover/add-conection-dj/add-conection-dj.module#AddConectionDjPageModule' }
 ];
 
 @NgModule({
