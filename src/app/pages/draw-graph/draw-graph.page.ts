@@ -14,6 +14,7 @@ import { AlertController } from '@ionic/angular';
 import { AddNodePage } from '../add-node/add-node.page';
 import { EdgeWeightComponent } from '../../../components/edge-weight/edge-weight.component';
 import { InitialFinalNodeComponent } from '../../../components/initial-final-node/initial-final-node.component';
+import fordFulkerson from 'graph-theory-ford-fulkerson'
 
 declare var require: any;
 
@@ -27,11 +28,11 @@ export class DrawGraphPage implements OnInit {
     solveOption;
 
     constructor(
-      private modalController: ModalController,
-      public toastController: ToastController,
-      public popoverController: PopoverController,
-      public alertController: AlertController
-    ){ }
+        private modalController: ModalController,
+        public toastController: ToastController,
+        public popoverController: PopoverController,
+        public alertController: AlertController
+    ) { }
 
     goHome() {
         this.modalController.dismiss();
@@ -62,7 +63,7 @@ export class DrawGraphPage implements OnInit {
             edge.data("label", data.weight)
                 .data("weight", data.weight)
                 .data("id", edgeId + data.weight);
-            if(data.weight2 !== undefined){
+            if (data.weight2 !== undefined) {
                 edge.data("weight2", data.weight2)
             }
         }
@@ -224,21 +225,21 @@ export class DrawGraphPage implements OnInit {
         this.cy.fit();
     }
     //Este metodo guarda la opcion que se seleccionó en el selector y cambia un poco el estilo visual dependiendo del método
-    store(option){
+    store(option) {
         this.solveOption = option;
-        if (option == 'MSTree'){
-            this.cy.style().selector('edge').style({'target-arrow-shape' : 'none'}).update();
-        }else{
-            this.cy.style().selector('edge').style({'target-arrow-shape' : 'triangle'}).update();
+        if (option == 'MSTree') {
+            this.cy.style().selector('edge').style({ 'target-arrow-shape': 'none' }).update();
+        } else {
+            this.cy.style().selector('edge').style({ 'target-arrow-shape': 'triangle' }).update();
         }
     }
 
-    pintar2(start, end, path){
+    pintar2(start, end, path) {
         start.select()
         end.select()
-        for(let i = 0; i < path.length-1;i++){
-            console.log(path[i].id + path[i+1].id)
-            this.cy.edges('[source = "'+path[i+1].id +'" ][target = "'+path[i].id  + '" ]').select();
+        for (let i = 0; i < path.length - 1; i++) {
+            console.log(path[i].id + path[i + 1].id)
+            this.cy.edges('[source = "' + path[i + 1].id + '" ][target = "' + path[i].id + '" ]').select();
         }
     }
     /**
@@ -246,12 +247,12 @@ export class DrawGraphPage implements OnInit {
      * @param aristas Es un arreglo de aristas resultado de algun metodo de los que estamos trabajando aqui
      *
      */
-    pintar(aristas){
-        for (let i = 0; i < aristas.length; i++){
+    pintar(aristas) {
+        for (let i = 0; i < aristas.length; i++) {
             //Por alguna razon el 'compilador' llora que porque no tiene metodo select, lo mas gracioso es que aun asi jala
             aristas[i].select();
             //Selecciono nodo inicial
-            let split : Array<string> = aristas[i].data('id').split('->');
+            let split: Array<string> = aristas[i].data('id').split('->');
             this.cy.getElementById(
                 split[0]
             ).select();
@@ -259,7 +260,7 @@ export class DrawGraphPage implements OnInit {
             //Selecciono nodo final
             this.cy.getElementById(
                 //Como al la id es de la forma [nodo inicio] -> [nodo final]:, debo consultar la substring para obtener la pura id del nodo final
-                split[1].substring(0,split[1].length-1)
+                split[1].substring(0, split[1].length - 1)
             ).select();
         }
     }
@@ -267,7 +268,7 @@ export class DrawGraphPage implements OnInit {
      * Metodo para encontrar el arbol de expansión mínima del grafo utilizando el algoritmo de Prim
      * @param start Nodo de inicio
      */
-    MSTree(start){
+    MSTree(start) {
         //Inicializo las estructuras necesarias
         let MST = new Collections.LinkedList();
         let edgesQueue = new PriorityQueue();
@@ -277,12 +278,12 @@ export class DrawGraphPage implements OnInit {
         visitedVertices[start.data('id')] = start;
 
         //Agrego todas las aristas conectadas al inicio a la cola de prioridad
-        start.connectedEdges().forEach(function( ele ){
-            edgesQueue.add(ele,ele.data('weight'));
-          });
+        start.connectedEdges().forEach(function(ele) {
+            edgesQueue.add(ele, ele.data('weight'));
+        });
 
         //Exploramos todas las aristas encoladas
-        while (!edgesQueue.isEmpty()){
+        while (!edgesQueue.isEmpty()) {
 
             let currentMinEdge: any = edgesQueue.poll();
 
@@ -292,23 +293,23 @@ export class DrawGraphPage implements OnInit {
              * Como la id es de la forma {id_nodo_inicio}->{id_nodo_final}
              * entonces podemos saber por los index en la string las ids de los nodos
              */
-            let split : Array<string> = currentMinEdge.data('id').split('->');
-            if (!visitedVertices[split[0]]){
+            let split: Array<string> = currentMinEdge.data('id').split('->');
+            if (!visitedVertices[split[0]]) {
                 nextMinVertex = this.cy.getElementById(split[0]);
-            } else if (!visitedVertices[split[1].substring(0,split[1].length-1)]){
-                nextMinVertex = this.cy.getElementById(split[1].substring(0,split[1].length-1));
+            } else if (!visitedVertices[split[1].substring(0, split[1].length - 1)]) {
+                nextMinVertex = this.cy.getElementById(split[1].substring(0, split[1].length - 1));
             }
 
-            if (nextMinVertex){
+            if (nextMinVertex) {
                 MST.add(currentMinEdge);
                 visitedVertices[nextMinVertex.data('id')] = nextMinVertex;
 
                 //Agrego todas las aristas conectadas a la cola de prioridad
-                nextMinVertex.connectedEdges().forEach(function( ele ){
+                nextMinVertex.connectedEdges().forEach(function(ele) {
                     let aux = ele.data('id').split('->');
                     if (!visitedVertices[aux[0]]
-                        || !visitedVertices[aux[1].substring(0,aux[1].length-1)])
-                    edgesQueue.add(ele,ele.data('weight'));
+                        || !visitedVertices[aux[1].substring(0, aux[1].length - 1)])
+                        edgesQueue.add(ele, ele.data('weight'));
                 });
 
             }
@@ -316,12 +317,12 @@ export class DrawGraphPage implements OnInit {
         return MST.toArray();
     }
 
-    RCorta(start, end, edges){
+    RCorta(start, end, edges) {
 
         let createGraph = require('ngraph.graph');
         let graph = createGraph();
-        for(let i = 0; i < edges[0].length ; i++){
-            graph.addLink(edges[0][i], edges[1][i], {weight: edges[2][i]});
+        for (let i = 0; i < edges[0].length; i++) {
+            graph.addLink(edges[0][i], edges[1][i], { weight: edges[2][i] });
         }
         // graph.addLink('a', 'b', {weight: 10});
         // graph.addLink('a', 'c', {weight: 10});
@@ -330,17 +331,17 @@ export class DrawGraphPage implements OnInit {
         let pathFinder = star(graph, {
             // We tell our pathfinder what should it use as a distance function:
             distance(fromNode, toNode, link) {
-              // We don't really care about from/to nodes in this case,
-              // as link.data has all needed information:
-              return link.data.weight;
+                // We don't really care about from/to nodes in this case,
+                // as link.data has all needed information:
+                return link.data.weight;
             }
-          });
-          try{
+        });
+        try {
             let path = pathFinder.find(start, end);
             return path;
-          }catch{
-              this.presentToast("No se encontró camino");
-          }
+        } catch{
+            this.presentToast("No se encontró camino");
+        }
 
     }
     //Por el momento funciona con el nodo de inicio en el seleccionado, no se como se podria implementar para elegir el nodo final
@@ -348,38 +349,38 @@ export class DrawGraphPage implements OnInit {
     end;
     selectStart = true;
     async solve() {
-        if(this.selectStart){
+        if (this.selectStart) {
             this.start = this.cy.$(':selected');
-        }else{
+        } else {
             this.end = this.cy.$(':selected');
         }
-        switch(this.solveOption) {
+        switch (this.solveOption) {
             case "RCorta":
-                if(this.end != undefined && this.end.length && this.start.length && this.start.data('id') != this.end.data('id')){
+                if (this.end != undefined && this.end.length && this.start.length && this.start.data('id') != this.end.data('id')) {
                     let nodes = this.getDictionarie();
                     let edges = this.getEdges();
                     let path = this.RCorta(this.start.data('id'), this.end.data('id'), edges);
-                    if(path)
+                    if (path)
                         this.pintar2(this.start, this.end, path);
                     this.end = undefined;
                     this.start = undefined
                     this.selectStart = true;
                     console.log(path);
 
-                }else if(!this.start.length){
+                } else if (!this.start.length) {
                     this.presentToast("Favor de seleccionar el nodo inicio");
-                }else if(this.end == undefined || !this.end.length ){
+                } else if (this.end == undefined || !this.end.length) {
                     this.start.unselect()
                     this.presentToast("Favor de seleccionar ahora el nodo final");
                     this.selectStart = false;
-                }else if(this.start.data('id') == this.end.data('id')){
+                } else if (this.start.data('id') == this.end.data('id')) {
                     this.presentToast("Favor de seleccionar nodo final distinto a inicio");
                 }
-               break;
+                break;
             case "MSTree":
-               this.pintar(this.MSTree(this.start));
-               break;
-            case "RCritica":{
+                this.pintar(this.MSTree(this.start));
+                break;
+            case "RCritica": {
                 const criticalPath = new CriticalPath(this.cy);
                 const paths = criticalPath.getCriticalPaths();
                 const slack = criticalPath.getSlackTimes();
@@ -387,55 +388,121 @@ export class DrawGraphPage implements OnInit {
                 this.presentAlert('Ruta crítica', body);
                 break;
             }
-            case "FlujoMax":{
-                //statements;
+            case "FlujoMax": {
+                if (this.end != undefined && this.end.length && this.start.length && this.start.data('id') != this.end.data('id')) {
+                    let nodes = this.getDictionarie();
+                    nodes.pop();
+                    nodes.sort();
+
+                    let map1 = new Map<string, number>();
+                    for (var i = 0; i < nodes.length; i++) {
+                        map1.set(nodes[i], i);
+                    }
+
+                    let maxFlow = fordFulkerson(this.getMatrix(), map1.get(this.start.data('id')), map1.get(this.end.data('id')));
+
+                    if (maxFlow)
+                        this.presentAlert("Flujo Máximo", "El resultado es " + maxFlow);
+                        //this.presentToast("El Flujo M�ximo del Grafo es: " + maxFlow);
+
+                    console.log(maxFlow);
+
+                    this.end = undefined;
+                    this.start = undefined
+                    this.selectStart = true;
+
+                } else if (!this.start.length) {
+                    this.presentToast("Favor de seleccionar el nodo inicio");
+                } else if (this.end == undefined || !this.end.length) {
+                    this.start.unselect()
+                    this.presentToast("Favor de seleccionar ahora el nodo final");
+                    this.selectStart = false;
+                } else if (this.start.data('id') == this.end.data('id')) {
+                    this.presentToast("Favor de seleccionar nodo final distinto a inicio");
+                }
+
                 break;
             }
         }
     }
 
-    constructBody(paths: string[], slack: string[]){
-      let message = `<li>${paths.join('</li><li>')}</li></br>`;
-      if (slack.length > 0) {
-        message = message.concat(`Holguras</br><li>${slack.join('</li><li>')}</li>`);
-      }
-      return message;
+    getMatrix() {
+        var matrix = [];
+
+        let nodes = this.getDictionarie();
+        nodes.pop();
+        var length = nodes.length;
+
+        for (var i = 0; i < length; i++)
+            matrix[i] = new Array(length);
+
+        for (var i = 0; i < length; i++) {
+            for (var j = 0; j < length; j++) {
+                matrix[i][j] = 0;
+            }
+        }
+
+        nodes.sort();
+
+        let map = new Map<string, number>();
+        for (var i = 0; i < nodes.length; i++) {
+            map.set(nodes[i], i);
+        }
+
+        let edges = this.getEdges();
+
+        for (var i = 0; i < edges[0].length; i++) {
+            var x = map.get(edges[0][i]);
+            var y = map.get(edges[1][i]);
+
+            matrix[x][y] = edges[2][i];
+        }
+
+        return matrix;
+    }
+
+    constructBody(paths: string[], slack: string[]) {
+        let message = `<li>${paths.join('</li><li>')}</li></br>`;
+        if (slack.length > 0) {
+            message = message.concat(`Holguras</br><li>${slack.join('</li><li>')}</li>`);
+        }
+        return message;
     }
 
     async presentAlert(method: string, message: string) {
-      let alert = await this.alertController.create({
-        header: 'Resultados',
-        subHeader: method,
-        message: message,
-        buttons: ['OK']
-      });
-      await alert.present();
+        let alert = await this.alertController.create({
+            header: 'Resultados',
+            subHeader: method,
+            message: message,
+            buttons: ['OK']
+        });
+        await alert.present();
     }
 
-    getDictionarie(){
-        var nodes = this.cy.nodes().map(function( ele ){
+    getDictionarie() {
+        var nodes = this.cy.nodes().map(function(ele) {
             return ele.data('id');
         });
         return nodes;
     }
 
-    getEdges(){
-        var source = this.cy.edges().map(function( ele ){
+    getEdges() {
+        var source = this.cy.edges().map(function(ele) {
             return ele.data('source');
         });
-        var target = this.cy.edges().map(function( ele ){
+        var target = this.cy.edges().map(function(ele) {
             return ele.data('target');
         });
-        var weight = this.cy.edges().map(function( ele ){
+        var weight = this.cy.edges().map(function(ele) {
             return ele.data('weight');
         });
-        var weight2 = this.cy.edges().map(function( ele ){
+        var weight2 = this.cy.edges().map(function(ele) {
             return ele.data('weight2');
         });
-        if(weight2 !== undefined){
+        if (weight2 !== undefined) {
             return [source, target, weight, weight2];
         }
-        else{
+        else {
             return [source, target, weight];
         }
     }

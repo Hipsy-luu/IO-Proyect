@@ -34,6 +34,7 @@
     "core-js": "^2.5.4",
     "cytoscape": "^3.5.7",
     "cytoscape-edgehandles": "^3.5.1",
+    "graph-theory-ford-fulkerson": "^1.0.0",
     "javascript-algorithms-and-data-structures": "github:trekhleb/javascript-algorithms#master",
     "js-graph-algorithms": "^1.0.18",
     "munkres-js": "^1.2.2",

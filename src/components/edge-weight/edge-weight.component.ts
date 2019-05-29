@@ -9,7 +9,6 @@ import { PopoverController } from '@ionic/angular';
 export class EdgeWeightComponent implements OnInit {
 
     edgeWeight: number;
-    edgeWeight2: number;
 
     constructor(private popoverController: PopoverController) { }
 
@@ -17,8 +16,7 @@ export class EdgeWeightComponent implements OnInit {
 
     ok() {
         this.popoverController.dismiss({
-            weight: this.edgeWeight,
-            weight2: this.edgeWeight2
+            weight: this.edgeWeight
         });
     }
 
