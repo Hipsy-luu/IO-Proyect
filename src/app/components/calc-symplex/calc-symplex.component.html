@@ -3,142 +3,181 @@
     <!--<ion-img src="/assets/shapes.svg"></ion-img>-->
     <ion-card-header>
       <ion-card-subtitle>Solucion:</ion-card-subtitle>
-      <ion-card-title>Valor Optimo: {{simplexTabService.solution.solution.optimum}}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <!-- aqui van las restricciones pero reescritas -->
       <ion-list lines="none">
         <ion-list-header>
-          <ion-label>Coeficientes:</ion-label>
-        </ion-list-header>
-
-        <ion-item>
           <ion-label style="text-align: -webkit-center;text-transform: uppercase;">
-            {{simplexTabService.solution.solution.coefficients}}
+            Valor Optimo : {{simplexTabService.solution.solution.optimum}}
           </ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let resultado of simplexTabService.solution.solution.resultVariables; let numero = index">
+          X<sub>{{(numero+1)}}</sub> : {{resultado}}
         </ion-item>
-
       </ion-list>
     </ion-card-content>
   </ion-card>
 
   <!-- esta parte es para llenar los campos del metodo -->
-    <ion-card>
-        <!--<ion-img src="/assets/shapes.svg"></ion-img>-->
-        <ion-card-header>
-        
+  <ion-card>
+      <!--<ion-img src="/assets/shapes.svg"></ion-img>-->
+      <ion-card-header>
+      
 
-          <ion-toolbar>
-            <!--
-            <ion-item>
-              <ion-label>Optimizacion:</ion-label>
-              <ion-select [(ngModel)]="simplexTabService.optimizationType" placeholder="Todos" cancelText="Cancelar">
+        <ion-toolbar>
+          <!--
+          <ion-item>
+            <ion-label>Optimizacion:</ion-label>
+            <ion-select [(ngModel)]="simplexTabService.optimizationType" placeholder="Todos" cancelText="Cancelar">
+              <ion-select-option value="max">MaxZ</ion-select-option>
+              <ion-select-option value="min">MinZ</ion-select-option>
+            </ion-select>
+          </ion-item>
+          -->
+          <ion-item>
+            <ion-label style="flex: auto;width: 50%;">Variables<sub>n</sub>:</ion-label>
+            <ion-button color="dark" (click)="decrementNumofVar()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+            <ion-label 
+              style="text-align: center" >{{simplexTabService.numVar}}</ion-label>
+            <ion-button color="dark" (click)="incrementNumofVar()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+          </ion-item>
+          <ion-item>
+            <ion-label style="flex: auto;width: 50%;">Restricciones<sub>n</sub>:</ion-label>
+            <ion-button color="dark" (click)="decrementNumofRest()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+            <ion-label 
+              style="text-align: center" >{{simplexTabService.numRest}}</ion-label>
+            <ion-button color="dark" (click)="incrementNumofRest()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+          </ion-item>
+        </ion-toolbar>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-card-subtitle>Ecuacion Objetivo</ion-card-subtitle>
+        <ion-grid>
+          <ion-row align-items-center>
+            <!-- <ion-item style="--padding-start: 0px;--inner-padding-end: 0px;width: 90px;">
+              <ion-col>
+                <ion-label *ngIf="simplexTabService.optimizationType=='max'">MaxZ =</ion-label>
+                <ion-label *ngIf="simplexTabService.optimizationType=='min'">MinZ =</ion-label>
+              </ion-col>
+            </ion-item> -->
+            <ion-item style="--padding-start: 0px;--inner-padding-end: 0px;">
+              <ion-select style="max-width: 100%;" [(ngModel)]="simplexTabService.optimizationType" cancelText="Cancelar">
                 <ion-select-option value="max">MaxZ</ion-select-option>
-                <ion-select-option value="min">MinZ</ion-select-option>
+                <ion-select-option value="min">MinZ</ion-select-option> 
               </ion-select>
             </ion-item>
-            -->
-            <ion-item>
-              <ion-label style="flex: auto;width: 50%;">Variables<sub>n</sub>:</ion-label>
-              <ion-button color="dark" (click)="decrementNumofVar()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
-              <ion-label 
-                style="text-align: center" >{{simplexTabService.numVar}}</ion-label>
-              <ion-button color="dark" (click)="incrementNumofVar()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
-            </ion-item>
-            <ion-item>
-              <ion-label style="flex: auto;width: 50%;">Restricciones<sub>n</sub>:</ion-label>
-              <ion-button color="dark" (click)="decrementNumofRest()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
-              <ion-label 
-                style="text-align: center" >{{simplexTabService.numRest}}</ion-label>
-              <ion-button color="dark" (click)="incrementNumofRest()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
-            </ion-item>
-          </ion-toolbar>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-card-subtitle>Ecuacion Objetivo</ion-card-subtitle>
-          <ion-grid>
-            <ion-row align-items-center>
-              <!-- <ion-item style="--padding-start: 0px;--inner-padding-end: 0px;width: 90px;">
-                <ion-col>
-                  <ion-label *ngIf="simplexTabService.optimizationType=='max'">MaxZ =</ion-label>
-                  <ion-label *ngIf="simplexTabService.optimizationType=='min'">MinZ =</ion-label>
-                </ion-col>
-              </ion-item> -->
+            <ion-label>=</ion-label>
+            <ion-col 
+              *ngFor="let variable of simplexTabService.objectiveEc;let i = index"
+              style="padding: 0px;"
+              size="3.5"
+              >
               <ion-item style="--padding-start: 0px;--inner-padding-end: 0px;">
-                <ion-select style="max-width: 100%;" [(ngModel)]="simplexTabService.optimizationType" cancelText="Cancelar">
-                  <ion-select-option value="max">MaxZ</ion-select-option>
-                  <ion-select-option value="min">MinZ</ion-select-option> 
-                </ion-select>
+                <ion-input 
+                inputmode="numeric"
+                style="--padding-start: 0px;text-align: -webkit-center;" 
+                type="text" 
+                [(ngModel)]="simplexTabService.objectiveEc[i].val"></ion-input>X
+                <sub>{{(i+1)}}</sub><h1 *ngIf="i<(simplexTabService.objectiveEc.length-1)">+</h1> 
               </ion-item>
-              <ion-label>=</ion-label>
-              <ion-col 
-                *ngFor="let variable of simplexTabService.objectiveEc;let i = index"
-                style="padding: 0px;"
-                size="3.5"
-                >
-                <ion-item style="--padding-start: 0px;--inner-padding-end: 0px;">
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- aqui van las restricciones -->
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-label>Restricciones</ion-label>
+          </ion-list-header>
+          <ion-item >
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <sub>n</sub>\<sup>n</sup>
+                </ion-col>
+                <ion-col *ngFor="let item of simplexTabService.objectiveEc;let i = index">
+                  X<sub>{{(i+1)}}</sub>
+                </ion-col>
+                <ion-col align-self-center	style="font-size: 10px;">
+                  <ion-label>TIPO</ion-label>
+                </ion-col>
+                <ion-col align-self-center	style="font-size: 10px;">
+                  <ion-label>CONST</ion-label>
+                </ion-col>
+              </ion-row>
+              <ion-row  *ngFor="let constraint of simplexTabService.constraints; let i = index">
+                <ion-col align-self-center size="1"><ion-label>{{(i+1)}}</ion-label></ion-col>
+                <ion-col style="text-align: center;" align-self-center  *ngFor="let item of constraint.namedVector">
                   <ion-input 
                   inputmode="numeric"
                   style="--padding-start: 0px;text-align: -webkit-center;" 
-                  type="text" 
-                  [(ngModel)]="simplexTabService.objectiveEc[i].val"></ion-input>X
-                  <sub>{{(i+1)}}</sub><h1 *ngIf="i<(simplexTabService.objectiveEc.length-1)">+</h1> 
-                </ion-item>
+                  type="text"
+                  [(ngModel)]="item.val"></ion-input>
+                </ion-col>
+                <ion-col align-self-center>
+                  <ion-select [(ngModel)]="constraint.constraint" style="max-width: 100%;" cancelText="Cancelar">
+                    <ion-select-option value="<="><=</ion-select-option>
+                    <ion-select-option value=">=">>=</ion-select-option>
+                    <ion-select-option value="=">=</ion-select-option>
+                  </ion-select>
+                </ion-col>
+                <ion-col style="text-align: center;" align-self-center>
+                  <ion-input 
+                  inputmode="numeric"
+                  style="--padding-start: 0px;text-align: -webkit-center;" 
+                  type="text"
+                  [(ngModel)]="constraint.constant"></ion-input>
+                </ion-col>
+              </ion-row>
+              <ion-row align-items-center style="text-align: center;">
+                <ion-col align-self-center>
+                  <ion-button color="dark" (click)="simplexTabService.solveProblemUI()">CALCULAR</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+ <!-- esta parte es para llenar los campos del metodo -->
+ <ion-card>
+    <ion-card-content>
+      <!-- aqui van las restricciones -->
+      <ion-list *ngIf="simplexTabService.solution.solution.iteraciones.length>1" lines="none">
+        <ion-list-header>
+          <ion-label>Iteraciones</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let iteracion of simplexTabService.solution.solution.iteraciones; let iterNum = index">
+          <ion-grid>
+            <ion-row>
+              No. {{iterNum}} <ion-label *ngIf="iteracion.pivot"><br> Pivote:  Fila = {{iteracion.pivot.row}}, Col = {{iteracion.pivot.column}}</ion-label>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                Ec
+              </ion-col>
+              <ion-col 
+                align-self-center
+                *ngFor="let item of iteracion.variables"
+                style="text-align: center;">
+                <ion-label *ngIf="item=='max'">Z</ion-label>
+                <ion-label *ngIf="item=='rhs'">Sol</ion-label>
+                <ion-label *ngIf="item!='max' && item!='rhs'">{{(item)}}</ion-label>
               </ion-col>
             </ion-row>
+            <ion-row  *ngFor="let constraint of simplexTabService.solution.solution.iteraciones[iterNum].rows;let i = index">
+              <ion-col 
+                align-self-center
+              ><ion-label>{{(i)}}</ion-label></ion-col>
+              <ion-col 
+                *ngFor="let valor of constraint;"
+                align-self-center
+              ><ion-label>{{(valor.toFixed(2))}}</ion-label></ion-col>
+            </ion-row>
           </ion-grid>
-          <!-- aqui van las restricciones -->
-          <ion-list lines="none">
-            <ion-list-header>
-              <ion-label>Restricciones</ion-label>
-            </ion-list-header>
-            <ion-item >
-              <ion-grid>
-                <ion-row>
-                  <ion-col>
-                    <sub>n</sub>\<sup>n</sup>
-                  </ion-col>
-                  <ion-col *ngFor="let item of simplexTabService.objectiveEc;let i = index">
-                    X<sub>{{(i+1)}}</sub>
-                  </ion-col>
-                  <ion-col align-self-center	style="font-size: 10px;">
-                    <ion-label>TIPO</ion-label>
-                  </ion-col>
-                  <ion-col align-self-center	style="font-size: 10px;">
-                    <ion-label>CONST</ion-label>
-                  </ion-col>
-                </ion-row>
-                <ion-row  *ngFor="let constraint of simplexTabService.constraints; let i = index">
-                  <ion-col align-self-center size="1"><ion-label>{{(i+1)}}</ion-label></ion-col>
-                  <ion-col style="text-align: center;" align-self-center  *ngFor="let item of constraint.namedVector">
-                    <ion-input 
-                    inputmode="numeric"
-                    style="--padding-start: 0px;text-align: -webkit-center;" 
-                    type="text"
-                    [(ngModel)]="item.val"></ion-input>
-                  </ion-col>
-                  <ion-col align-self-center>
-                    <ion-select [(ngModel)]="constraint.constraint" style="max-width: 100%;" cancelText="Cancelar">
-                      <ion-select-option value="<="><=</ion-select-option>
-                      <ion-select-option value=">=">>=</ion-select-option>
-                    </ion-select>
-                  </ion-col>
-                  <ion-col style="text-align: center;" align-self-center>
-                    <ion-input 
-                    inputmode="numeric"
-                    style="--padding-start: 0px;text-align: -webkit-center;" 
-                    type="text"
-                    [(ngModel)]="constraint.constant"></ion-input>
-                  </ion-col>
-                </ion-row>
-                <ion-row align-items-center style="text-align: center;">
-                  <ion-col align-self-center>
-                    <ion-button color="dark" (click)="simplexTabService.solveProblemUI()">CALCULAR</ion-button>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-  
-          </ion-list>
-        </ion-card-content>
-      </ion-card>
+        </ion-item>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>

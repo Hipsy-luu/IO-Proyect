@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 //Libreria para el metodo simplex
-import * as SimpleSimplex from 'simple-simplex';
+import * as SimplexSolver from 'simplex-solver';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +17,28 @@ export class SimplexTabService {
     isOptimal : false,
     
     solution : {
-      coefficients : "",
+      result : [],
+      resultVariables : [],
+      iteraciones : [{
+        variables : [
+          'a'
+        ],
+        pivot : {
+          row : 0,
+          column : 0
+        }
+      }],
       optimum : 0
-    }
+    },
+    result : {
+      tableaus: [], 
+      max: 0,
+      a: 0, 
+      b: 0}
   };
+
+ ;
+
   coefficients;
   constructor() {
     this.numVar = 2;
@@ -72,67 +90,57 @@ export class SimplexTabService {
   solveProblemUI(){
     //Construccion del objeto con las variables y los numeros de la ecuacion objetivo
     //Para alimentar el metodo solve
-    let dictionary = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 
-    'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-    let objectiveEcCons = [];
+    let dictionary = ['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11', 'X12', 
+    'X13', 'X14', 'X15', 'X16', 'X17', 'X18', 'X19', 'X20', 'X21', 'X22', 'X23', 'X24', 'X25', 'X26', 'X27'];
+    var ecObj = "";
     for(var i = 0; i< this.objectiveEc.length ; i++){
       //Se multiplica por menos uno si se quiere minimizar
       if(this.optimizationType == 'min'){
-        objectiveEcCons[dictionary[i]] = (-1)*(parseInt( this.objectiveEc[i].val));
+        ecObj += (-1)*(parseFloat( this.objectiveEc[i].val)) + dictionary[i];
       }else{
-        objectiveEcCons[dictionary[i]] = parseInt( this.objectiveEc[i].val);
+        ecObj += (parseFloat( this.objectiveEc[i].val)) + dictionary[i];
       }
-      
+      if(( i + 1 ) < this.objectiveEc.length){
+        ecObj += " + ";
+      }
     }
+    //console.log(ecObj);
     
     //Reconstruccion de las restricciones para darle el formato que pide la libreria
-    let constraintsCons = [];
     let namedVectorCons = {};
+    let constraintsStr = [];
+    var ecCons = "";
+    
     for (let index = 0; index < this.constraints.length; index++) {
       namedVectorCons = {};
+      ecCons = "";
       for(var i = 0; i<this.constraints[index].namedVector.length; i++){
         namedVectorCons[dictionary[i]] = parseInt( this.constraints[index].namedVector[i].val);
-        
-      }
-      constraintsCons.push({
-        namedVector: namedVectorCons,
-        constraint: this.constraints[index].constraint,
-        constant: parseInt(this.constraints[index].constant),
-      });
-    }
-    //console.log(this.optimizationType);
-    //Se intenta llegar con la solucion si no se puede solo no se muestra
-    try {
-      //Aqui se manda llamar el objeto que puede resolver el problema
-      const solver = new SimpleSimplex({
-        objective: objectiveEcCons,
-        constraints: constraintsCons,
-        optimizationType: 'max', //Siempre debe ser max
-      });
-      // call the solve method with a method name
-      var result = solver.solve({
-        methodName: 'simplex',
-      });
-      
-      // see the solution and meta data
-      /*console.log({
-        solution: result.solution,
-        isOptimal: result.details.isOptimal,
-      });*/
-      
-      this.solution.isOptimal = result.details.isOptimal;
-      this.solution.solution.coefficients = JSON.stringify(result.solution.coefficients);
-      this.solution.solution.optimum = result.solution.optimum;
-    } catch (error) {
-      this.solution = {
-        isOptimal : false,
-        
-        solution : {
-          coefficients : "",
-          optimum : 0
+        ecCons += parseFloat( this.constraints[index].namedVector[i].val) + dictionary[i];
+        if(( i + 1 ) < this.constraints[index].namedVector.length){
+          ecCons += " + ";
         }
-      };
+      }
+      constraintsStr.push( ecCons + this.constraints[index].constraint + parseFloat(this.constraints[index].constant) );
     }
+    //console.log(constraintsStr);
+    this.solution.result = SimplexSolver.maximize(ecObj, constraintsStr);
+    //console.log(this.solution.result);
+    //Se tranforma el resultado en array para poder sacar las cosas importantes de el
+    this.solution.solution.result = Object.values(this.solution.result);
+    //console.log(this.solution.solution.result);
+    this.solution.solution.resultVariables = [];
+    for (let index = 2; index < this.solution.solution.result.length; index++) {
+      this.solution.solution.resultVariables.push( this.solution.solution.result[index].toFixed(2) );
+    }
+    this.solution.isOptimal = true;
+    //Se cargan las iteraciones
+    this.solution.solution.iteraciones = this.solution.solution.result[0];
+    //console.log(this.solution.solution.iteraciones);
+    //Se recoge el valor optimo 
+    this.solution.solution.optimum = this.solution.result["max"];
+    //console.log(this.solution.solution.resultVariables);
+    
 
   }
 }

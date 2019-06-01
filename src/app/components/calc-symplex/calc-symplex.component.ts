@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 //Y construirlo
 import { SimplexTabService } from '../../services/simplex-tab.service';
 
+
 @Component({
   selector: 'app-calc-symplex',
   templateUrl: './calc-symplex.component.html',
@@ -10,7 +11,9 @@ import { SimplexTabService } from '../../services/simplex-tab.service';
 })
 export class CalcSymplexComponent implements OnInit {
 
-  constructor(public simplexTabService : SimplexTabService) { }
+  constructor(public simplexTabService : SimplexTabService) {
+    
+   }
 
   ngOnInit() {}
 

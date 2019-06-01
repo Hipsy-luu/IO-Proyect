@@ -9,8 +9,6 @@ import { SimplexPage } from './simplex.page';
 
 //En este modulo tengo como implementar las graficas y los metodos relacionados en cada elemento
 import { ComponentsModule } from '../../components/components.component';
-import { DrawGraphPage } from "../draw-graph/draw-graph.page";
-import { DrawGraphPageModule } from "../draw-graph/draw-graph.module";
 
 const routes: Routes = [
   {
@@ -20,15 +18,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    entryComponents: [
-        DrawGraphPage
-    ],
     imports: [
         IonicModule,
         CommonModule,
         FormsModule,
         RouterModule.forChild(routes),
-        DrawGraphPageModule,
         ComponentsModule,
     ],
   declarations: [SimplexPage]
