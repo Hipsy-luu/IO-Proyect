@@ -12,6 +12,11 @@ export class HomePage implements OnInit {
 
   methods = [
     {
+        name: "Ramificación y Acotamiento",
+        img: "../assets/imgs/aco.jpg",
+        url: "/branch-bound",
+    },
+    {
         name: "Método Simplex",
         img: "../assets/imgs/simplex.jpg",
         url: "/simplex"

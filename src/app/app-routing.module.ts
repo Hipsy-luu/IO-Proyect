@@ -14,7 +14,8 @@ const routes: Routes = [
   { path: 'draw-graph', loadChildren: './pages/draw-graph/draw-graph.module#DrawGraphPageModule' },
   { path: 'hungaro', loadChildren: './pages/hungaro/hungaro.module#HungaroPageModule' },
   { path: 'north-corner', loadChildren: './pages/north-corner/north-corner.module#NorthCornerPageModule' },
-  { path: 'add-conection-dj', loadChildren: './components/popover/add-conection-dj/add-conection-dj.module#AddConectionDjPageModule' }
+  { path: 'add-conection-dj', loadChildren: './components/popover/add-conection-dj/add-conection-dj.module#AddConectionDjPageModule' },  { path: 'branch-bound', loadChildren: './pages/branch-bound/branch-bound.module#BranchBoundPageModule' }
+
 ];
 
 @NgModule({

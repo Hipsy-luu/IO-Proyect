@@ -1,0 +1,174 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Ramificación y Acotamiento</ion-title>
+  </ion-toolbar>
+ </ion-header>
+
+<ion-content>
+  <!-- esta parte es para llenar los campos del metodo -->
+  <ion-card>
+      <ion-card-header>
+      
+
+        <ion-toolbar>
+          <ion-item>
+            <ion-label style="flex: auto;width: 50%;">Variables<sub>n</sub>:</ion-label>
+            <ion-button color="dark" (click)="decrementNumofVar()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+            <ion-label 
+              style="text-align: center" >{{branchBoundService.numVar}}</ion-label>
+            <ion-button color="dark" (click)="incrementNumofVar()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+          </ion-item>
+          <ion-item>
+            <ion-label style="flex: auto;width: 50%;">Restricciones<sub>n</sub>:</ion-label>
+            <ion-button color="dark" (click)="decrementNumofRest()"><ion-icon name="remove-circle-outline"></ion-icon></ion-button>
+            <ion-label 
+              style="text-align: center" >{{branchBoundService.numRest}}</ion-label>
+            <ion-button color="dark" (click)="incrementNumofRest()"><ion-icon name="add-circle-outline"></ion-icon></ion-button>
+          </ion-item>
+        </ion-toolbar>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-card-subtitle>Ecuacion Objetivo</ion-card-subtitle>
+        <ion-grid>
+          <ion-row align-items-center>
+            <!-- <ion-item style="--padding-start: 0px;--inner-padding-end: 0px;width: 90px;">
+              <ion-col>
+                <ion-label *ngIf="branchBoundService.optimizationType=='max'">MaxZ =</ion-label>
+                <ion-label *ngIf="branchBoundService.optimizationType=='min'">MinZ =</ion-label>
+              </ion-col>
+            </ion-item> -->
+            <ion-item style="--padding-start: 0px;--inner-padding-end: 0px;">
+              <ion-select style="max-width: 100%;" [(ngModel)]="branchBoundService.optimizationType" cancelText="Cancelar">
+                <ion-select-option value="max">MaxZ</ion-select-option>
+                <ion-select-option value="min">MinZ</ion-select-option> 
+              </ion-select>
+            </ion-item>
+            <ion-label>=</ion-label>
+            <ion-col 
+              *ngFor="let variable of branchBoundService.objectiveEc;let i = index"
+              style="padding: 0px;"
+              size="3.5"
+              >
+              <ion-item style="--padding-start: 0px;--inner-padding-end: 0px;">
+                <ion-input 
+                inputmode="numeric"
+                style="--padding-start: 0px;text-align: -webkit-center;" 
+                type="text" 
+                [(ngModel)]="branchBoundService.objectiveEc[i].val"></ion-input>X
+                <sub>{{(i+1)}}</sub><h1 *ngIf="i<(branchBoundService.objectiveEc.length-1)">+</h1> 
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <!-- aqui van las restricciones -->
+        <ion-list lines="none">
+          <ion-list-header>
+            <ion-label>Restricciones</ion-label>
+          </ion-list-header>
+          <ion-item >
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <sub>n</sub>\<sup>n</sup>
+                </ion-col>
+                <ion-col *ngFor="let item of branchBoundService.objectiveEc;let i = index">
+                  X<sub>{{(i+1)}}</sub>
+                </ion-col>
+                <ion-col align-self-center	style="font-size: 10px;">
+                  <ion-label>TIPO</ion-label>
+                </ion-col>
+                <ion-col align-self-center	style="font-size: 10px;">
+                  <ion-label>CONST</ion-label>
+                </ion-col>
+              </ion-row>
+              <ion-row  *ngFor="let constraint of branchBoundService.constraints; let i = index">
+                <ion-col align-self-center size="1"><ion-label>{{(i+1)}}</ion-label></ion-col>
+                <ion-col style="text-align: center;" align-self-center  *ngFor="let item of constraint.namedVector">
+                  <ion-input 
+                  inputmode="numeric"
+                  style="--padding-start: 0px;text-align: -webkit-center;" 
+                  type="text"
+                  [(ngModel)]="item.val"></ion-input>
+                </ion-col>
+                <ion-col align-self-center>
+                  <ion-select [(ngModel)]="constraint.constraint" style="max-width: 100%;" cancelText="Cancelar">
+                    <ion-select-option value="<="><=</ion-select-option>
+                    <ion-select-option value=">=">>=</ion-select-option>
+                    <ion-select-option value="=">=</ion-select-option>
+                  </ion-select>
+                </ion-col>
+                <ion-col style="text-align: center;" align-self-center>
+                  <ion-input 
+                  inputmode="numeric"
+                  style="--padding-start: 0px;text-align: -webkit-center;" 
+                  type="text"
+                  [(ngModel)]="constraint.constant"></ion-input>
+                </ion-col>
+              </ion-row>
+              <ion-row align-items-center style="text-align: center;">
+                <ion-col align-self-center>
+                  <ion-button color="dark" (click)="branchBoundService.solveProblemUI()">CALCULAR</ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+    <!------------------------------------------------RESULTADO--------------------------------------------------------------->
+    <!-- Esta parte muestra el resultado del metodo y se habilida con el servicio-->
+    <ion-card *ngIf="branchBoundService.solution.isOptimal">
+      <!--<ion-img src="/assets/shapes.svg"></ion-img>-->
+      <ion-card-header>
+        <ion-card-subtitle>Solucion:</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Resultados -->
+        <ion-list lines="none">
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-label style="text-align: -webkit-center;text-transform: uppercase;">
+                  Limite Superior U = {{branchBoundService.maxU}}
+                </ion-label>
+              </ion-row>
+              <ion-row>
+                <ion-label style="text-align: -webkit-center;text-transform: uppercase;">
+                  Limite Inferior F = {{branchBoundService.minF}}
+                </ion-label>
+              </ion-row>
+              <ion-row style="align-items: center">
+                <ion-col size="2"><ion-label>Nodo</ion-label></ion-col>
+                <ion-col size="2"><ion-label>U</ion-label></ion-col>
+                <ion-col size="3"><ion-label>Res</ion-label></ion-col>
+                <ion-col size="2" *ngFor="let variable of branchBoundService.objectiveEc; let i = index">
+                  <ion-label>{{branchBoundService.dictionary[i]}}</ion-label>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngFor="let nodo of branchBoundService.resultadoNodos" style="align-items: center">
+                <ion-col size="1"><ion-label style="text-align: center;background-color: #000000;color: white;">{{nodo.nodo}}</ion-label></ion-col>
+                <ion-col size="3"><ion-label>{{nodo.actualU}}</ion-label></ion-col>
+                <ion-col size="3"><ion-label>{{nodo.constraitOfNode}}</ion-label></ion-col>
+                <ion-col size="2" *ngFor="let resultVar of nodo.values; let i = index">
+                  <ion-label>{{resultVar.toFixed(3)}}</ion-label>
+                </ion-col>
+                <ion-col size="12">
+                  <ion-label *ngIf="nodo.final.charAt(0) == '-'" style="text-align: center; background-color: lawngreen">
+                    {{nodo.final}}
+                  </ion-label>
+                  <ion-label *ngIf="nodo.final.charAt(0) != '-'" style="text-align: center; background-color: #dadada">
+                    {{nodo.final}}
+                  </ion-label>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+</ion-content>
+
